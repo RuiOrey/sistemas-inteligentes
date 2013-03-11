@@ -2,10 +2,6 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-
-
-
-
 class Arvore{
 	Scanner in=new Scanner(System.in);
 	Tabuleiro pai;
@@ -37,6 +33,9 @@ System.out.println("ESCOLHA O TIPO DE PESQUISA :");
 		
 		opc=in.nextInt();
 		Tabuleiro fim;
+		final long inicio=System.currentTimeMillis();
+		
+
 		switch(opc){
 			case 1: fim=prof();
 					break;
@@ -51,8 +50,12 @@ System.out.println("ESCOLHA O TIPO DE PESQUISA :");
 					break;
 			default: fim=null;
 		}
-	System.out.println("Profundidade:"+fim.depth);
-	System.out.printf("- visitados %d - Gerados %d -\n",visitados,gerados);
+	System.out.println("\n\n\n\n\n-----------------------------TERMINADO\n");
+	final long tempototal = System.currentTimeMillis() - inicio;
+	System.out.println("TEMPO DE COMPUTACAO\nEm milisegundos: " + tempototal +"ms.\nArredondado a segundos: "+(tempototal/1000 )+"s.");
+	System.out.println("\nProfundidade: "+fim.depth);
+	System.out.printf("\nNos Visitados: %d\nNos Gerados: %d\n",visitados,gerados);
+
 	}
 
 public Tabuleiro prof(){							//busca em profundidade
@@ -61,10 +64,6 @@ principal.add(pai);									//adiciona pai a lista principal
 while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o primeiro elemento
 		Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
 		visitados++;
-		//imprimetabuleiro(actual.tabuleiro);		
-
-		//System.out.printf("- visitados %d - Gerados %d -",visitados,gerados);
-
 		if (actual.isFinal(dest.tabuleiro)){
 			return actual;
 
@@ -72,9 +71,6 @@ while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o 
 		else{
 		
 			principal.addAll(0,expand(actual));
-
-		//	System.out.println("tamanho lista:"+principal.size());
-		
 		}
 	}
 	return pai;
@@ -87,10 +83,6 @@ principal.add(pai);									//adiciona pai a lista principal
 while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o primeiro elemento
 		Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
 		visitados++;
-				
-
-	//	System.out.printf("- visitados %d - Gerados %d -",visitados,gerados);
-
 		if (actual.isFinal(dest.tabuleiro)){
 			return actual;
 
@@ -98,8 +90,6 @@ while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o 
 		else{
 		
 			principal.addAll(expand(actual));
-	//		System.out.println("tamanho lista:"+principal.size());
-		
 		}
 	}
 	return pai;
@@ -109,15 +99,10 @@ public Tabuleiro profit(){
 			principal.add(pai);				//adiciona pai a lista principal
 			for (int i=0;i<10000;i++){
 					principal.clear();
-					//System.out.println("Profundidade"+i);
 					principal.add(pai);	
 						while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o primeiro elemento
 								Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
 								visitados++;
-										
-
-					//			System.out.printf("- visitados %d - Gerados %d -",visitados,gerados);
-
 								if (actual.isFinal(dest.tabuleiro)){
 									return actual;
 
@@ -126,203 +111,118 @@ public Tabuleiro profit(){
 									if (actual.depth<=i)
 									{
 									principal.addAll(0,expand(actual));
-									//System.out.println("tamanho lista:"+principal.size());
 									}
 				}
 	}
 }
 	return pai;
 }
-public Tabuleiro greed(){
+public Tabuleiro greed()
+		{
 			ArrayList<Tabuleiro> auxili=new ArrayList<Tabuleiro>();
 			principal.add(pai);									//adiciona pai a lista principal
 			while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o primeiro elemento
-				
-
-
 				auxili.clear();
-			/*	for(int i=0; i<principal.size(); i++){
-					   			
-					   			//	System.out.println(principal.get(i).heuristica);
-							     
-							}
-			*/	Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
+				Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
 				visitados++;
-						
-
-			//	System.out.printf("- visitados %d - Gerados %d -",visitados,gerados);
-
 				if (actual.isFinalH(dest.tabuleiro)){
 					return actual;
 
 				}
-				else{
+				else
+				{
 					auxili=expandEG(actual);
-					   for(int i=0; i<auxili.size(); i++){
+					   for(int i=0; i<auxili.size(); i++)
+					   		{
 					   				auxili.get(i).geraHeuristica(dest.tabuleiro);
-					   			
-				//	   				System.out.println(auxili.get(i).heuristica);
-							     
 							}
-						//	System.out.println("t");
 
 					principal.addAll(0,auxili);
 
 					Collections.sort(principal);
 					
-						/*	System.out.println("n");
-					System.out.println("tamanho lista:"+principal.size()+" heuristica:"+actual.heuristica+ " Profundidade:"+actual.depth);
-				/*	for(int i=0; i<principal.size(); i++){
-					   				System.out.println(principal.get(i).heuristica);
-							     
-							}*/
-	}}
-	return pai;
+				}
+			}
+			return pai;
 	
 
-	}
+		}
 
 public Tabuleiro estrela(){
 			ArrayList<Tabuleiro> auxili=new ArrayList<Tabuleiro>();
 			principal.add(pai);									//adiciona pai a lista principal
 			while(!principal.isEmpty()){						//enquanto a lista nao estiver vazia remove o primeiro elemento
-				
-
-
-				auxili.clear();
-			/*	for(int i=0; i<principal.size(); i++){
-					   			
-					   				System.out.println(principal.get(i).heuristica);
-							     
-							}*/
-				Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
-				visitados++;
-						
-
-			//	System.out.printf("- visitados %d - Gerados %d -",visitados,gerados);
-
-				if (actual.isFinalH(dest.tabuleiro)){
-					return actual;
-
-				}
+					auxili.clear();
+					Tabuleiro actual=principal.remove(0);		//e analisa se é final. se não for expande
+					visitados++;
+					if (actual.isFinalH(dest.tabuleiro))
+						{
+							return actual;
+						}
 				else{
-					auxili=expandE(actual);
-					   for(int i=0; i<auxili.size(); i++){
+						auxili=expandE(actual);
+				   		for(int i=0; i<auxili.size(); i++)
+				   				{
 					   				auxili.get(i).geraHeuristica(dest.tabuleiro);
 					   				auxili.get(i).heurEstr();
-					   			//	System.out.println(auxili.get(i).heuristica);
-							     
-							}
-							/*System.out.println("t");
-					
-				*/	principal.addAll(0,auxili);
-
-					Collections.sort(principal);
-					
-			/*s				System.out.println("n");
-					System.out.println("tamanho lista:"+principal.size()+" heuristica:"+actual.heuristica+ " Profundidade:"+actual.depth);
-				/*	for(int i=0; i<principal.size(); i++){
-					   				System.out.println(principal.get(i).heuristica);
-							     
-							}*/
-	}}
-	return pai;
-	
-
-	}
-
-
-public ArrayList<Tabuleiro> expand(Tabuleiro pai3){    //expande o pai
-	int[][] tabpai=copiatabuleiro(pai3);
-	//System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<CICLO");
-	ArrayList<Tabuleiro> test= new ArrayList<Tabuleiro>();
-	
-		
-		//imprimetabuleiro(tabpai);
-
-
-	//	System.out.println("inicio do movimento para direita");
-	if ((pai3.getvazioY()-1)>=0)
-		{
-
-		Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
-		//imprimetabuleiro(filho3.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho3,pai3))
-			{
-			test.add(filho3);
-			}
-		
-//System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");	
-		}
-
-
-
-			//	System.out.println("inicio do movimento para baixo");
-	
-		//imprimetabuleiro(tabpai);
-	if ((pai3.getvazioX()+1)<=2)
-		{
-
-		Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
-		//imprimetabuleiro(filho4.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho4,pai3))
-			{
-			test.add(filho4);
-			}
-//System.out.println("ENDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD CICLO");	
-		}
-
-	
-	if ((pai3.getvazioY()+1)<=2)
-		{
-				Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
-				//imprimetabuleiro(filho2.tabuleiro);
-				gerados++;
-				
-					
-				tabpai=copiatabuleiro(pai3);
-				
-				if (!repeat(filho2,pai3))
-					{
-					test.add(filho2);
+					   			}
+						principal.addAll(0,auxili);
+						Collections.sort(principal);
 					}
-					
-					//System.out.println("----------------------------------------------");
+				}
+	return pai;
+}
 
+
+public ArrayList<Tabuleiro> expand(Tabuleiro pai3){    //expande o pai para algoritmos sem heuristica
+	int[][] tabpai=copiatabuleiro(pai3);
+	ArrayList<Tabuleiro> test= new ArrayList<Tabuleiro>();
+	if ((pai3.getvazioY()-1)>=0)
+		{
+			Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho3,pai3))
+				{
+				test.add(filho3);
+				}
 		}
 
-//		System.out.println("inicio do movimento para cima");
+	if ((pai3.getvazioX()+1)<=2)
+		{
+			Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho4,pai3))
+				{
+				test.add(filho4);
+				}
+		}
+
 	
-		//imprimetabuleiro(tabpai);
+	if ((pai3.getvazioY()+1)<=2)
+		{
+			Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho2,pai3))
+				{
+				test.add(filho2);
+				}
+		}
+
 	if ((pai3.getvazioX()-1)>=0)
 		{
-
-		Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
-		//imprimetabuleiro(filho1.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho1,pai3))
-			{
-			test.add(filho1);
-			}
-		
-//System.out.println("****************************************************");	
+			Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho1,pai3))
+				{
+				test.add(filho1);
+				}
 		}
 
-	//	System.out.println("inicio do movimento para esquerda");
+
 
 	return test;
 	}
@@ -330,181 +230,100 @@ public ArrayList<Tabuleiro> expand(Tabuleiro pai3){    //expande o pai
 
 
 
-public ArrayList<Tabuleiro> expandE(Tabuleiro pai3){    //expande o pai
+public ArrayList<Tabuleiro> expandE(Tabuleiro pai3){    //expande o pai para o algoritmo A* 
 	int[][] tabpai=copiatabuleiro(pai3);
-	//System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<CICLO");
 	ArrayList<Tabuleiro> test= new ArrayList<Tabuleiro>();
-	
-		
-		//imprimetabuleiro(tabpai);
-
-
-	//	System.out.println("inicio do movimento para direita");
 	
 	if ((pai3.getvazioY()+1)<=2)
 		{
-		Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
-		//imprimetabuleiro(filho2.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		
+			Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
 			test.add(filho2);
-		
-			
-			//System.out.println("----------------------------------------------");
-
 		}
 
-//		System.out.println("inicio do movimento para cima");
-	
-		//imprimetabuleiro(tabpai);
 	if ((pai3.getvazioX()-1)>=0)
 		{
-
-		Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
-		//imprimetabuleiro(filho1.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
+			Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
 			test.add(filho1);
-		
-//System.out.println("****************************************************");	
 		}
 
-	//	System.out.println("inicio do movimento para esquerda");
 	if ((pai3.getvazioY()-1)>=0)
 		{
-
-		Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
-		//imprimetabuleiro(filho3.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		
+			Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
 			test.add(filho3);
-		
-//System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");	
 		}
 
-
-
-			//	System.out.println("inicio do movimento para baixo");
-	
-		//imprimetabuleiro(tabpai);
 	if ((pai3.getvazioX()+1)<=2)
 		{
-
-		Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
-		//imprimetabuleiro(filho4.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		
+			Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
 			test.add(filho4);
-		
-//System.out.println("ENDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD CICLO");	
 		}
 
 	return test;
-	}
 
-public ArrayList<Tabuleiro> expandEG(Tabuleiro pai3){    //expande o pai
-	int[][] tabpai=copiatabuleiro(pai3);
-	//System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<CICLO");
-	ArrayList<Tabuleiro> test= new ArrayList<Tabuleiro>();
+}
+
+public ArrayList<Tabuleiro> expandEG(Tabuleiro pai3){    //expande o pai para algoritmo Greedy(= a A* mas com teste de repeticao)
 	
-		
-		//imprimetabuleiro(tabpai);
-
-
-	//	System.out.println("inicio do movimento para direita");
+	int[][] tabpai=copiatabuleiro(pai3);
+	ArrayList<Tabuleiro> test= new ArrayList<Tabuleiro>();
 	
 	if ((pai3.getvazioY()+1)<=2)
 		{
-		Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
-		//imprimetabuleiro(filho2.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho2,pai3)){
-			test.add(filho2);
-		}
-			
-			//System.out.println("----------------------------------------------");
-
+			Tabuleiro filho2=new Tabuleiro(pai3,tabpai,2,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho2,pai3))
+				{
+					test.add(filho2);
+				}
+				
 		}
 
-//		System.out.println("inicio do movimento para cima");
-	
-		//imprimetabuleiro(tabpai);
 	if ((pai3.getvazioX()-1)>=0)
 		{
-
-		Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
-		//imprimetabuleiro(filho1.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		if (!repeat(filho1,pai3)){
-			test.add(filho1);
-		}
-		
-//System.out.println("****************************************************");	
+			Tabuleiro filho1=new Tabuleiro(pai3,tabpai,1,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho1,pai3))
+				{
+					test.add(filho1);
+				}
 		}
 
-	//	System.out.println("inicio do movimento para esquerda");
 	if ((pai3.getvazioY()-1)>=0)
 		{
 
-		Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
-		//imprimetabuleiro(filho3.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho3,pai3)){
-			test.add(filho3);
-		}
-		
-//System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");	
+			Tabuleiro filho3=new Tabuleiro(pai3,tabpai,3,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho3,pai3))
+				{
+					test.add(filho3);
+				}
 		}
 
-
-
-			//	System.out.println("inicio do movimento para baixo");
-	
-		//imprimetabuleiro(tabpai);
 	if ((pai3.getvazioX()+1)<=2)
 		{
 
-		Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
-		//imprimetabuleiro(filho4.tabuleiro);
-		gerados++;
-		
-			
-		tabpai=copiatabuleiro(pai3);
-		
-		if (!repeat(filho4,pai3)){
-			test.add(filho4);
-		}
-		
-//System.out.println("ENDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD CICLO");	
+			Tabuleiro filho4=new Tabuleiro(pai3,tabpai,4,pai3.getDepthT());
+			gerados++;
+			tabpai=copiatabuleiro(pai3);
+			if (!repeat(filho4,pai3))
+				{
+					test.add(filho4);
+				}
 		}
 
 	return test;
+
 	}
 
 
@@ -542,45 +361,52 @@ public boolean repeat(Tabuleiro objectivo,Tabuleiro filhoa){
 	
 			Tabuleiro teste=filhoa;
 			int flag=0;
-			while(teste!=null)
+			while(teste!=null) 												// enquanto tabuleiro a testar não chegar ao pai da raiz(null)
 				{
 					flag=0;
-					for (int i=0;i<3;i++){
-						for(int j=0;j<3;j++){
-
-							//System.out.println("compara repetiçoes "+objectivo.tabuleiro[i][j]+" "+teste.tabuleiro[i][j]);
-							if (objectivo.tabuleiro[i][j]!=teste.tabuleiro[i][j])
-									{
-									flag=1;
-									//System.out.println("found difference");
-									}
+					for (int i=0;i<3;i++)
+						{
+						
+							for(int j=0;j<3;j++)
+								{
+									if (objectivo.tabuleiro[i][j]!=teste.tabuleiro[i][j])
+											{
+												flag=1;										//tabuleiros são diferentes
+											}
+								}
+						
 						}
-					}
-					if (flag==1){
+					
+					if (flag==1)
+						{
 							teste=teste.pai;
-							//System.out.println("found difference");
-					}
-					else {
-					//	System.out.println("Encontrado igual! NAO DESENVOLVE O NO");
-						return true;
+						}
+				
+					else 
+						{
+							return true;
 						}
 				}
 
-	//		System.out.println("Nenhum igual!");
 			return false;
 				}	
 				
 		}
 	
 
+
+
+
+
+
+
+
+
+
+
+
+
  class Tabuleiro implements Comparable<Tabuleiro>{
-
-
-
-
-
-
-
 	int [][] tabuleiro= new int [3][3];
 	int vaziox,vazioy;
 	Tabuleiro pai=null;
@@ -589,73 +415,61 @@ public boolean repeat(Tabuleiro objectivo,Tabuleiro filhoa){
 	int outplace=0;
 	int movesneed=0;
 	int heuristica;
-	/*child
-		1-move-se esquerda
-		2-move-se baixo
-		3-move-se direita
-		4-move-se cima
-		*/
-
+		
 		
 
-		Tabuleiro(int [][] finalt)
-		{
+		Tabuleiro(int [][] finalt){                               //construtor para pai
 			tabuleiro=finalt;
 			depth=0;
 			finala=true;
 			for(int i=0;i<3;i++){
 				for(int j=0;j<3;j++){
 					if (finalt[i][j]==0){vazioy=i;vaziox=j;}
+				}
 			}
 		}
-	}
 
 		
 
-	Tabuleiro(Tabuleiro tabp,int[][] aux,int child,int dept){    //construtor de filho. Recebe como input o tabuleiro pai, a direcçao a seguir e a profundidade actual
-		depth=1+dept;
-		//System.out.println(dept);
-		pai=tabp;
-		int paix=pai.getvazioX();
-		int paiy=pai.getvazioY();
-		int temp;
-		vaziox=paix;
-		vazioy=paiy;
-		
-		int tab[][]=aux;
+		Tabuleiro(Tabuleiro tabp,int[][] aux,int child,int dept){    //construtor de filho. Recebe como input o tabuleiro pai, a direcçao a seguir e a profundidade actual
+			depth=1+dept;
+			pai=tabp;
+			int paix=pai.getvazioX();
+			int paiy=pai.getvazioY();
+			int temp;
+			vaziox=paix;
+			vazioy=paiy;
+			int tab[][]=aux;
+			int par;
+			switch (child){
+					case 1: 
+							tab[paix][paiy] =tab[paix-1][paiy];			//cima
+							tab[paix-1][paiy]=0;
+							vaziox--;
+							break;
+					
+					case 2: 											//direita
+							tab[paix][paiy] =tab[paix][paiy+1];
+							tab[paix][paiy+1]=0;
+							vazioy++;
+							break;
+					
+					case 3: tab[paix][paiy] =tab[paix][paiy-1];			//esquerda
+							tab[paix][paiy-1]=0;
+							vazioy--;
+							break;
+					
+					case 4: tab[paix][paiy] =tab[paix+1][paiy];			//baixo
+							tab[paix+1][paiy]=0;
+							vaziox++;
+							break;
+					default:System.out.println("ERRO NA DIRECAO A SEGUIR");
+							break;
+						}
 
-		int par;
-		switch (child){
-				case 1: 
-						//System.out.println(tab[paix][paiy]+" valor que deveria ser o zero ");		//cima
-						tab[paix][paiy] =tab[paix-1][paiy];
-						tab[paix-1][paiy]=0;
-						//System.out.println(tab[paix][paiy]+" valor que deveria ser o novo zero");
-						vaziox--;
-						break;
-				case 2: //System.out.println(tab[paix][paiy]+" isto deve ser 0 ");			//direita
-						tab[paix][paiy] =tab[paix][paiy+1];
-						//System.out.println(tab[paix][paiy]+" valor que substituiu o zero ");
-						tab[paix][paiy+1]=0;
-						//System.out.println(tab[paix][paiy]+" valor que deveria ser o zero ");
-						vazioy++;
-						break;
-				case 3: tab[paix][paiy] =tab[paix][paiy-1];			//esquerda
-						tab[paix][paiy-1]=0;
-						vazioy--;
-						break;
-				case 4: tab[paix][paiy] =tab[paix+1][paiy];			//baixo
-						tab[paix+1][paiy]=0;
-						vaziox++;
-						break;
-				default:System.out.println("ERRO NA DIRECAO A SEGUIR");
-						break;
-					}
+			tabuleiro=tab;
 
-		tabuleiro=tab;
-//		System.out.println("Vazio "+vaziox+" "+vazioy+"pais"+paix+paiy);
-
-}
+		}
 
 
 
@@ -678,203 +492,185 @@ public boolean repeat(Tabuleiro objectivo,Tabuleiro filhoa){
 
 		
 
-	public Boolean isFinal(int[][] test){
-		Scanner in=new Scanner(System.in);
-		for (int i=0;i<3;i++){
-			//System.out.println(" ");
-			for(int j=0;j<3;j++){
-				//System.out.println(tabuleiro[i][j] +" "+ test[i][j] );
-				if (tabuleiro[i][j]!=test[i][j]){return false;}
-				
-			}
+	public Boolean isFinal(int[][] test)
+		{
+			Scanner in=new Scanner(System.in);
+			for (int i=0;i<3;i++)
+				{
+					for(int j=0;j<3;j++)
+						{
+							if (tabuleiro[i][j]!=test[i][j]){return false;}
+							
+						}
+				}
+			System.out.println("Encontrada solucao com profundidade "+depth);
+	    	System.out.println("Terminado.");
+			return true;
 		}
-		System.out.println("Encontrada solucao com profundidade "+depth);
-	//	 in.next();
-    	System.out.println("Finished.");
-		return true;
-	}
 
 
-	public int compareTo(Tabuleiro compara) {
+	public int compareTo(Tabuleiro compara) 			
+		{																	//comparador para organizar precedencias de heuristica
+			int comparaHeuristica = ((Tabuleiro) compara).heur(); 
+			return    (this.heur()-comparaHeuristica);
+		}
 
-		int comparaHeuristica = ((Tabuleiro) compara).heur(); 
-
-		return    (this.heur()-comparaHeuristica);
-	}
 
 	public void geraHeuristica(int[][] test){
 		outplace=0;
 		movesneed=0;
-		//System.out.println(movesneed+ " before "+depth);
-		for (int i=0;i<3;i++){
-			//System.out.println(" ");
-			for(int j=0;j<3;j++){
-				//System.out.println(tabuleiro[i][j] +" "+ test[i][j] );
-				if (tabuleiro[i][j]!=test[i][j]){
-					
-
-					movesneed= movesneed + movesUntil(tabuleiro[i][j],test,i,j);
-				//	System.out.println(movesneed+ " "+depth);
-				}
-				
-			}
-	//		heuristica=movesneed+outplace;
-		}
-
-heuristica=outplace+movesneed;
-	}
-
-	public boolean isFinalH(int[][] test){
-		Scanner in=new Scanner(System.in);
-		outplace=0;
-		movesneed=0;
-		for (int i=0;i<3;i++){
-			//System.out.println(" ");
-			for(int j=0;j<3;j++){
-				//System.out.println(tabuleiro[i][j] +" "+ test[i][j] );
-				if (tabuleiro[i][j]!=test[i][j]){
-					outplace++;
-				
-				}
-				
-			}
-		}
-		if (outplace==0){
-		System.out.println("Encontrada solucao com profundidade "+depth);
-		// in.next();
-    	System.out.println("Finished.");
-		return true;}
-		else{
-			
-			return false;
-		}
-	}
-
-
-	public int heur(){
-		return heuristica;
-	}
-
-
-	public void heurEstr(){
-		heuristica=heuristica+depth;
-	}
-
-	public int movesUntil(int alvo,int [][] tested,int x, int y){
-		for (int i=0;i<3;i++){
-			for(int j=0;j<3;j++){
-				if(tested[i][j]==alvo){
-					return (Math.abs(i-x)+Math.abs(j-y));
-				}
-			}
-		}
-		return 0;
-	}
-
-	public int[][] tabulArray(){
-		return tabuleiro;
-	}
-
-		public int isPar(){
-		int par=0;
-		for (int linha=0;linha<3;linha++)
-		{
-			for(int coluna=0;coluna<3;coluna++){
-				{
-					for(int colunac=0;colunac<3;colunac++){
-						for (int linhac=0;linhac<3;linhac++){
-
-
-								
-							if (linhac<linha || (linhac==linha && colunac<=coluna) || tabuleiro[linhac][colunac]==0 ||  tabuleiro[linha][coluna]==0 )
-								{}
-							else{
-								if (tabuleiro[linha][coluna]>tabuleiro[linhac][colunac] ){
-										par++;
-						//	System.out.println("comparaçao "+tabuleiro[linha][coluna]+" com "+tabuleiro[linhac][colunac]+ " linha:"+linha+ " c:"+coluna+ " linhac:"+linhac+ " colunac:"+colunac);
-							
-						//		System.out.println("Ok");
-								}
-								else{
-									
-								}
-
+		for (int i=0;i<3;i++)
+			{
+					for(int j=0;j<3;j++)
+					{
+						if (tabuleiro[i][j]!=test[i][j])
+							{
+								movesneed= movesneed + movesUntil(tabuleiro[i][j],test,i,j);
 							}
-						}
 					}
+		}
 
+		heuristica=outplace+movesneed;
+	}
+
+
+	public boolean isFinalH(int[][] test)
+		{
+			Scanner in=new Scanner(System.in);
+			outplace=0;
+			movesneed=0;
+			for (int i=0;i<3;i++){
+				for(int j=0;j<3;j++){
+					if (tabuleiro[i][j]!=test[i][j]){
+						outplace++;
+					
+					}
 				}
 			}
-		}
-		return par;
+			if (outplace==0){
+			System.out.println("Encontrada solucao com profundidade "+depth);
+			System.out.println("Finished.");
+			return true;}
+			else{
+					return false;
 				}
+		}
+
+
+	public int heur()
+		{
+		return heuristica;
+		}
+
+
+	public void heurEstr()
+		{
+			heuristica=heuristica+depth;
+		}
+
+
+	public int movesUntil(int alvo,int [][] tested,int x, int y)
+		{
+			for (int i=0;i<3;i++){
+				for(int j=0;j<3;j++){
+					if(tested[i][j]==alvo){
+						return (Math.abs(i-x)+Math.abs(j-y));
+					}
+				}
+			}
+			return 0;
+		}
+
+
+	public int[][] tabulArray()
+		{
+			return tabuleiro;
+		}
+
+
+	public int isPar()
+		{
+			int par=0;
+			for (int linha=0;linha<3;linha++)
+				{
+					for(int coluna=0;coluna<3;coluna++)
+						{
+							for(int colunac=0;colunac<3;colunac++)
+								{
+									for (int linhac=0;linhac<3;linhac++)
+										{
+											if (linhac<linha || (linhac==linha && colunac<=coluna) || tabuleiro[linhac][colunac]==0 ||  tabuleiro[linha][coluna]==0 )
+												{}
+											else
+												{
+													if (tabuleiro[linha][coluna]>tabuleiro[linhac][colunac] )
+														{
+															par++;
+														}
+													else
+														{}
+
+												}
+										}
+								}
+						}
+					
+				}
+			return par;
+		}
 
 }
 
-class SI{
+
+class SI
+	{
+		public static void main(String args[])
+			{
+				int[][] tabuleiro1=new int[3][3]; 
+				int[][] tabuleiro2=new int[3][3]; 
+				Scanner in=new Scanner(System.in);
+				int opc;
+				int fim[][]={{1,2,3},{8,0,4},{7,6,5}};
+
+				tabuleiro1[0][0]=6;
+				tabuleiro1[0][1]=5;
+				tabuleiro1[0][2]=4;
+				tabuleiro1[1][0]=7;
+				tabuleiro1[1][1]=8;
+				tabuleiro1[1][2]=1;	
+				tabuleiro1[2][0]=2;
+				tabuleiro1[2][1]=3;
+				tabuleiro1[2][2]=0;
+
+				tabuleiro2[0][0]=6;
+				tabuleiro2[0][1]=5;
+				tabuleiro2[0][2]=7;
+				tabuleiro2[1][0]=2;
+				tabuleiro2[1][1]=0;
+				tabuleiro2[1][2]=1;	
+				tabuleiro2[2][0]=8;
+				tabuleiro2[2][1]=4;
+				tabuleiro2[2][2]=3;
 
 
-
-
-	public static void main(String args[]){
-		int[][] tabuleiro1=new int[3][3]; 
-		int[][] tabuleiro2=new int[3][3]; 
-		Scanner in=new Scanner(System.in);
-		//int[][] fim=new int[3][3];
-		int opc;
-
-		int fim[][]={{1,2,3},{8,0,4},{7,6,5}};
-
-	//	int fim[][]={{6,5,0},{2,1,7},{8,4,3}};
-
-
-		tabuleiro1[0][0]=6;
-		tabuleiro1[0][1]=5;
-		tabuleiro1[0][2]=4;
-		tabuleiro1[1][0]=7;
-		tabuleiro1[1][1]=8;
-		tabuleiro1[1][2]=1;	
-		tabuleiro1[2][0]=2;
-		tabuleiro1[2][1]=3;
-		tabuleiro1[2][2]=0;
-
-		tabuleiro2[0][0]=6;
-		tabuleiro2[0][1]=5;
-		tabuleiro2[0][2]=7;
-		tabuleiro2[1][0]=2;
-		tabuleiro2[1][1]=0;
-		tabuleiro2[1][2]=1;	
-		tabuleiro2[2][0]=8;
-		tabuleiro2[2][1]=4;
-		tabuleiro2[2][2]=3;
-
-
-		Tabuleiro fimt = new Tabuleiro(fim);
-		Tabuleiro umt= new Tabuleiro(tabuleiro1);
-		Tabuleiro doist= new Tabuleiro(tabuleiro2);
-		
-		System.out.println("\n*******************************************************\nTESTE DE PARIDADE\n-----------------------------");
-		System.out.println("Soma final "+fimt.isPar() + ".Paridade = "+(fimt.isPar()%2) );
-		
-
-		System.out.println("----------------------------\nPARIDADE TABULEIRO UM.\nSoma um "+umt.isPar()+".Paridade = "+(umt.isPar()%2) );
-
-		System.out.println("----------------------------\nPARIDADE TABULEIRO DOIS.\nSoma dois "+doist.isPar()+".Paridade = "+(doist.isPar()%2) );
-		if (doist.isFinal(fim)){System.out.println("Tabuleiro FINAL");} else{System.out.println("Tabuleiro NAO FINAL");}
-		
-		if ((doist.isPar()%2)==(fimt.isPar()%2))
-			{System.out.println("Tabuleiro RESOLVIVEL pelo teste de paridade");} 
-		else{System.out.println("Tabuleiro NAO RESOLVIVEL pelo teste de paridade");
+				Tabuleiro fimt = new Tabuleiro(fim);
+				Tabuleiro umt= new Tabuleiro(tabuleiro1);
+				Tabuleiro doist= new Tabuleiro(tabuleiro2);
+				
+				System.out.println("\n*******************************************************\nTESTE DE PARIDADE\n-----------------------------");
+				System.out.println("Soma final "+fimt.isPar() + ".Paridade = "+(fimt.isPar()%2) );
+				System.out.println("----------------------------\nPARIDADE TABULEIRO UM.\nSoma um "+umt.isPar()+".Paridade = "+(umt.isPar()%2) );
+				System.out.println("----------------------------\nPARIDADE TABULEIRO DOIS.\nSoma dois "+doist.isPar()+".Paridade = "+(doist.isPar()%2) );
+				if (doist.isFinal(fim)){System.out.println("Tabuleiro FINAL");} else{System.out.println("Tabuleiro NAO FINAL");}
+				if ((doist.isPar()%2)==(fimt.isPar()%2))
+					{System.out.println("Tabuleiro RESOLVIVEL pelo teste de paridade");} 
+				else{System.out.println("Tabuleiro NAO RESOLVIVEL pelo teste de paridade");}
+				Arvore dois=new Arvore(doist,fimt);
+				dois.algoritmos();
 			}
-			Arvore dois=new Arvore(doist,fimt);
+			
+
+
+
 		
-			dois.algoritmos();
-
-
-		}
-		
-
-
-
-	
-}
+	}
